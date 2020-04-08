@@ -12,11 +12,11 @@ Visit [here](https://nil1729.github.io/Javascript/Weather-App) to see how it wor
 
 * The API provider is [Open Weather Map](http://www.OpenWeatherMap.org).
 
-# Github Profile Fetcher#
+# Github Profile Fetcher #
 
 Visit [here](https://nil1729.github.io/Javascript/Github-Profile-Fetcher/) to see how it works.
 
 ### About Github Profile Fetcher ###
 
-*  When you type the username of an user on search Box and click on Search button this App will show you name, avatar, number of Github Repositories, number of followers of that user. Here we use the Github [api](https://api.github.com/users) key for fetching data of the users.
+*  When you type the **username** of an user on search Box and click on Search button this App will show you name, avatar, number of Github Repositories, number of followers of that user. Here we use the Github [api](https://api.github.com/users) key for fetching data of the users.
 
