@@ -8,6 +8,7 @@ let latitude;
 let longitude;
 let temperatureUnit = 'celsius';
 let temperatureValue;
+let temperatureValueC;
 
 weatherTemperature.addEventListener('click', () => {
     if (temperatureValue === undefined) {
@@ -18,7 +19,7 @@ weatherTemperature.addEventListener('click', () => {
             weatherTemperature.innerHTML = `<span>${temperatureValue} </span><span>&deg</span>F`
             temperatureUnit = 'fahrenheit'
         } else {
-            temperatureValue = Math.floor(((temperatureValue - 32) * 5) / 9);
+            temperatureValue = temperatureValueC;
             weatherTemperature.innerHTML = `<span>${temperatureValue} </span><span>&deg</span>C`
             temperatureUnit = 'celsius'
         }
@@ -49,17 +50,18 @@ function getLocation() {
 getLocation();
 
 function getWeather() {
-    let api = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=82005d27a116c2880c8f0fcb866998a0`;
+    let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=82005d27a116c2880c8f0fcb866998a0`;
     fetch(api)
         .then(function(resp) {
             return resp.json();
         })
         .then(function(data) {
             console.log(data);
-            temperatureValue = Math.floor(data.main.temp - 273);
+            temperatureValueC = Math.floor(data.main.temp - 273);
+            temperatureValue = temperatureValueC;
             weatherTemperature.innerHTML = `<span>${temperatureValue} </span><span>&deg</span>c`;
             weatherCondition.innerHTML = data.weather[0].description;
-            locationName.innerHTML = data.name;
+            locationName.innerHTML = `<span>${data.name}, ${data.sys.country}</span>`;
             icon.innerHTML = `<img src="./icons/${data.weather[0].icon}.png" alt="initial">`
         });
 }
