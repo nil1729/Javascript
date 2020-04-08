@@ -9,7 +9,7 @@ body {
     justify-content: center;
     align-items: center;
     height: 80vh;
-    overflow: hidden;
+    overflow-x: hidden;
     background-color: #293251;
     letter-spacing: 2px;
     font-size: 18px;
