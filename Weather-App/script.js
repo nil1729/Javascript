@@ -49,7 +49,7 @@ function getLocation() {
 getLocation();
 
 function getWeather() {
-    let api = `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=82005d27a116c2880c8f0fcb866998a0`;
+    let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=82005d27a116c2880c8f0fcb866998a0`;
     fetch(api)
         .then(function(resp) {
             return resp.json();
