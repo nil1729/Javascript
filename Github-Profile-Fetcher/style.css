@@ -1,0 +1,88 @@
+@import url('https://fonts.googleapis.com/css?family=Nunito&display=swap');
+body {
+    margin: 0;
+    padding: 0 0 20px 0;
+    font-family: 'Nunito', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    overflow-x: hidden;
+    background-color: #293251;
+    min-height: 35vh;
+}
+
+.header {
+    font-size: 20px;
+    color: rgb(231, 168, 223);
+    letter-spacing: 2px;
+}
+
+.form-section {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 85px;
+    margin-bottom: 20px;
+}
+
+.form-section .search-box {
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+}
+
+.form-section .search-box .username {
+    outline: none;
+    border: none;
+    background-color: rgb(168, 196, 223);
+    min-height: 25px;
+    border-radius: 8px;
+    padding: 5px 5px 5px 10px;
+    letter-spacing: 1.5px;
+    font-size: 20px;
+    width: 95%;
+    font-family: 'Nunito', sans-serif;
+    color: black;
+}
+
+.form-section .search-btn .btn {
+    outline: none;
+    font-size: 18px;
+    border-radius: 5px;
+    padding: 3px 8px 3px 8px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    color: black;
+}
+
+.api-show {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: white;
+    letter-spacing: 2px;
+    font-size: 18px;
+}
+
+.api-show p {
+    margin: 10px 10px 0 10px;
+    text-align: center;
+}
+
+.user-name {
+    font-size: 25px;
+    text-align: center;
+    color: rgb(241, 166, 138);
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.user-avatar img {
+    height: 250px;
+    width: 250px;
+}
