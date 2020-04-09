@@ -147,5 +147,5 @@ list.addEventListener('click', (event) => {
 
 window.onload = () => {
     let randomNumber = Math.floor(Math.random() * 5 + 1);
-    header.style.backgroundImage = `url('../img/${randomNumber}.jpg')`
+    header.style.backgroundImage = `url('./img/${randomNumber}.jpg')`
 }
