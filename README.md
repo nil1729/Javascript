@@ -20,3 +20,37 @@ Visit [here](https://nil1729.github.io/Javascript/Github-Profile-Fetcher/) to se
 
 *  When you type the **username** of an user on search Box and click on Search button this App will show you name, avatar, number of Github Repositories, number of followers of that user. Here we use the Github [api](https://api.github.com/users) key for fetching data of the users.
 
+
+# To Do List App #
+
+Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Works.
+
+### About To Do List ###
+
+* In this App, I use vanilla Javascript to create a beautiful and functional **To Do List**
+
+* This To Do List has a beautiful UI, the user can add a To-Do by filling the input and hit ENTER or PLUS after that he can rather check the To-Do when it's done, or remove it using the delete button.
+
+* The user's to-do list is stored in the local storage, so when he refreshes the page, he can always find the list there.
+
+* There is the possibility for the user, to clear the list, by clicking the button clear, at the top right corner of our app.
+
+* The to do list app, shows the today's date to the user, for that I used a method called **toLocaleDateString**
+
+# Music Maker #
+
+Visit [here](https://nil1729.github.io/Javascript/Music-Maker/) to see how it Works.
+
+# Clock #
+* This is a simple Clock built using vanilla Javascript
+
+Visit [here](https://nil1729.github.io/Javascript/Clock/) to see how it Works.
+
+
+# AOS Grid #
+
+* This webpage is built using a Javascript Library Called [AOS]() (Animate on Scroll) and CSS Grid.
+
+Visit [here](https://nil1729.github.io/Javascript/AOS-Grid/) to see how it Works.
+
+
