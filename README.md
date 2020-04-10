@@ -2,7 +2,7 @@
 
 # Weather App #
 
-Visit [here](https://nil1729.github.io/Javascript/Weather-App) to see how it works.
+* Visit [here](https://nil1729.github.io/Javascript/Weather-App) to see how it works.
 
 ### About Weather App ###
 
@@ -14,7 +14,7 @@ Visit [here](https://nil1729.github.io/Javascript/Weather-App) to see how it wor
 
 # Github Profile Fetcher #
 
-Visit [here](https://nil1729.github.io/Javascript/Github-Profile-Fetcher/) to see how it works.
+* Visit [here](https://nil1729.github.io/Javascript/Github-Profile-Fetcher/) to see how it works.
 
 ### About Github Profile Fetcher ###
 
@@ -39,18 +39,19 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 
 # Music Maker #
 
-Visit [here](https://nil1729.github.io/Javascript/Music-Maker/) to see how it Works.
+* Visit [here](https://nil1729.github.io/Javascript/Music-Maker/) to see how it Works.
 
 # Clock #
+
 * This is a simple Clock built using vanilla Javascript
 
-Visit [here](https://nil1729.github.io/Javascript/Clock/) to see how it Works.
+* Visit [here](https://nil1729.github.io/Javascript/Clock/) to see how it Works.
 
 
 # AOS Grid #
 
-* This webpage is built using a Javascript Library Called [AOS]() (Animate on Scroll) and CSS Grid.
+* This webpage is built using a Javascript Library Called [AOS](https://github.com/michalsnik/aos) (Animate on Scroll) and CSS Grid.
 
-Visit [here](https://nil1729.github.io/Javascript/AOS-Grid/) to see how it Works.
+* Visit [here](https://nil1729.github.io/Javascript/AOS-Grid/) to see how it Works.
 
 
