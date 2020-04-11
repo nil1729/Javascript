@@ -58,4 +58,18 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 
 * This is a basic Chrome Extension named **Budget Manager** Which show your expenditures or Budget. You can also set the Limit of the Budget and Reset the Total by Going to **Options** Page. For add this in Chrome you first download the Chrome-Extension Folder or Create files like as in that Folder. Then go to `chrome://extensions/` and on **Developer Mode**, then click **load unpacked** and add your folder. This Extension also use the Chrome Storage to store your previous Expenditures and also give you notification when your Expenditure greater than your alloted Total Limit. :memo:
 
+# SMS Sending App #
 
+### About SMS Sending App ###
+* This App is built using node.js and [`twilio api`](https://www.twilio.com/). This App firstly ask you to `enter` your `Phone Number`. Phone Number Must be with country code (eg: +91 for INDIA). Then It will send you random SMS which have random quote which is fetched from [`kanye.rest`](https://kanye.rest/) api. This app sending you sms after every 5 minutes when you run the code for 30 minutes.
+
+### How do I get set up? ###
+
+#### Configuration needed for run this Code (Environment): 
+
+* Open Your `Command Prompt` and run this code `node --version` , this will give out like `v12.16.1` . If you get error then you have to install `nodejs`.
+* save the file or open an editor, copy and paste the code and save as `send_sms.js`.
+* In same directory run this code `npm install twilio`
+* Then run `npm install --save node-fetch`
+* run `npm install prompt`
+* All are setup now run `node send_sms.js` ans see Output. :email:
