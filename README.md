@@ -67,10 +67,10 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 
 #### Configuration needed for run this Code (Environment): 
 
-* For Sending SMS through twilio api, you must have a twilio api key. First of all Sign Up on [`twilio`](https://www.twilio.com/) and take your api key. 
+* For Sending SMS through `twilio api`, you must have a `twilio api` key. First of all Sign Up on [`twilio`](https://www.twilio.com/) and take your api key. 
 * Open Your `Command Prompt` and run this code `node --version` , this will give out like `v12.16.1` . If you get error then you have to install `nodejs`.
 * Save the file or open an editor, copy and paste the code and save as `send_sms.js`.
-* In the code, on these lines `const accountSid = 'your_account_sid'`, `const authToken = 'your_auth_token'` put your own `ACCOUNT SID` and `AUTH TOKEN` which you find with your `twilio api` key.   
+* In the code, on these lines `const accountSid = 'your_account_sid'`, `const authToken = 'your_auth_token'` put your own `ACCOUNT SID` and `AUTH TOKEN` respective, Which you get with your `twilio api` key.   
 * In same directory where you save your `send_sms.js` file, run this code `npm install twilio` on `Command Prompt`
 * Then run `npm install --save node-fetch`
 * run `npm install prompt`
