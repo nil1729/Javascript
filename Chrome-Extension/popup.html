@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Budget Maneger</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+        body {
+            margin: 0;
+            padding: 5px 10px;
+            box-sizing: border-box;
+            background-color: rgb(132, 132, 223);
+            text-align: center;
+            letter-spacing: 1px;
+            font-family: 'Montserrat', sans-serif;
+            color: white;
+            border: 1px solid orangered;
+        }
+        
+        input {
+            outline: none;
+            padding: 2px 8px;
+            font-size: 18px;
+            text-transform: capitalize;
+            border: none;
+            border-radius: 4px;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        #spendAmount {
+            color: rgb(255, 255, 255);
+            background-color: grey;
+            cursor: pointer;
+        }
+    </style>
+    <script src="jquery-3.5.0.min.js"></script>
+</head>
+
+<body>
+    <h1>Budget Maneger</h1>
+    <h2>Total Spend: <span id="total">0</span></h2>
+    <h2>Limit: <span id="limit">0</span></h2>
+    <h3>Enter Amount</h3>
+    <input type="text" id="amount">
+    <input type="submit" id="spendAmount" value="spend">
+    <script src="popup.js"></script>
+</body>
+
+
+</html>
