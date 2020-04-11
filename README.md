@@ -61,7 +61,7 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 # SMS Sending App #
 
 ### About SMS Sending App ###
-* This App is built using node.js and [`twilio api`](https://www.twilio.com/). This App firstly ask you to `enter` your `Phone Number`. Phone Number Must be with country code (eg: +91 for INDIA). Then It will send you random SMS which have random quote which is fetched from [`kanye.rest`](https://kanye.rest/) api. This app sending you sms after every 5 minutes when you run the code for 30 minutes.
+* This App is built using node.js and [`twilio api`](https://www.twilio.com/). This App firstly ask you to `enter` your `Phone Number`. Phone Number Must be with country code (eg: +91 for INDIA). Then It will send you random SMS which have random quote which is fetched from [`kanye.rest`](https://kanye.rest/) api. This app sending you sms after every 5 minutes when you run the code for 30 minutes duration.
 
 ### How do I get set up? ###
 
