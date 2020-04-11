@@ -1,8 +1,8 @@
 const fetch = require('node-fetch');
 var prompt = require('prompt');
 
-const accountSid = 'AC343c3e936cb543d65509a51b52bda8d6';
-const authToken = 'd4f1f622df07930276d6d465d3130122';
+const accountSid = 'your_account_sid';
+const authToken = 'your_auth_token';
 const client = require('twilio')(accountSid, authToken);
 
 function send_sms(body, phoneNumber) {
