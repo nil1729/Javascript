@@ -54,4 +54,8 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 
 * Visit [here](https://nil1729.github.io/Javascript/AOS-Grid/) to see how it Works.
 
+# Chrome-Extension (Basic) #
+
+* This is a basic Chrome Extension named **Budget Manager** Which show your expenditures or Budget. You can also set the Limit of the Budget and Reset the Total by Going to **Options** Page. For add this in Chrome you first download the Chrome-Extension Folder or Create files like as in that Folder. Then go to `chrome://extensions/` and on **Developer Mode**, then click **load unpacked** and add your folder. This Extension also use the Chrome Storage to store your previous Expenditures and also give you notification when your Expenditure greater than your alloted Total Limit. :memo:
+
 
