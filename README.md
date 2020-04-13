@@ -48,11 +48,11 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 * Visit [here](https://nil1729.github.io/Javascript/Clock/) to see how it Works.
 
 
-# AOS Grid #
+# Animate On Scroll using CSS Grid #
 
 * This webpage is built using a Javascript Library Called [AOS](https://github.com/michalsnik/aos) (Animate on Scroll) and CSS Grid.
 
-* Visit [here](https://nil1729.github.io/Javascript/AOS-Grid/) to see how it Works.
+* Visit [here](https://nil1729.github.io/Javascript/Animation-On-Scroll-Vanilla-JavaScript/) to see how it Works.
 
 # Chrome-Extension (Basic) #
 
