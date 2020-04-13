@@ -50,7 +50,7 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 
 # Animate On Scroll using CSS Grid #
 
-* This webpage is built using a Javascript Library Called [AOS](https://github.com/michalsnik/aos) (Animate on Scroll) and CSS Grid.
+* This webpage is built using simple Vanilla Javascript and CSS Grid. For this I use two Javascript DOM Property called [getBoundingClientRect()](https://www.w3schools.com/jsref/met_element_getboundingclientrect.asp) and [clientHeight](https://www.w3schools.com/jsref/prop_element_clientheight.asp).
 
 * Visit [here](https://nil1729.github.io/Javascript/Animation-On-Scroll-Vanilla-JavaScript/) to see how it Works.
 
