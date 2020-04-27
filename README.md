@@ -75,3 +75,9 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 * Then run `npm install --save node-fetch`
 * run `npm install prompt`
 * All are setup now run `node send_sms.js` ans see Output. :email:
+
+# Color-Game #
+
+* This is a simple Clock built using vanilla Javascript
+
+* Visit [here](https://nil1729.github.io/Javascript/Color-Game/) to see how it Works.
