@@ -78,6 +78,6 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 
 # Color-Game #
 
-* This is a simple Clock built using vanilla Javascript
+* This is a simple Color-Game built using vanilla Javascript
 
 * Visit [here](https://nil1729.github.io/Javascript/Color-Game/) to see how it Works.
