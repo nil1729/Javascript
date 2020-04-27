@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css?family=PT+Sans&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: rgb(29, 23, 23);
+    color: aliceblue;
+    text-transform: uppercase;
+    font-family: 'PT Sans', sans-serif;
+    letter-spacing: 1px;
+}
+
+#header {
+    text-align: center;
+    padding: 1em;
+    font-size: 2em;
+    font-weight: 100;
+    background-color: rgb(79, 113, 224);
+}
+
+#header h1 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    font-weight: 100;
+}
+
+#container {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.square {
+    background-color: blueviolet;
+    margin: 1.66%;
+    padding-bottom: 30%;
+    float: left;
+    width: 30%;
+    border-radius: 20%;
+    transition: 0.3s ease-in;
+}
+
+#stripe {
+    background-color: aliceblue;
+    text-align: center;
+    height: 35px;
+    margin-bottom: 1em;
+    color: black;
+    padding: 0 10%;
+}
+
+.selected {
+    background-color: rgb(79, 113, 224);
+    color: aliceblue;
+}
+
+.mode {
+    float: right;
+}
+
+#reset {
+    float: left;
+}
+
+#message {
+    font-size: 150%;
+    color: rgb(79, 113, 224);
+    font-weight: 700;
+}
+
+button {
+    outline: none;
+    border: none;
+    height: 35px;
+    color: rgb(79, 113, 224);
+    font-size: 150%;
+    padding: 0 1%;
+    background: transparent;
+    text-transform: uppercase;
+}
