@@ -5,10 +5,11 @@ const errorMsg = document.getElementById('error-msg');
 const errorDiv = document.querySelector('.error-div');
 const listDiv = document.querySelector('.list-group');
 const closeBtn = document.querySelector('.close');
-
+const refreshBtn = document.querySelector('.btn-refresh')
 window.onload = () => {
     updateUI();
 };
+refreshBtn.addEventListener('click', refresh);
 closeBtn.addEventListener('click', resetForm);
 submitBtn.addEventListener('click', () => {
     const webName = siteName.value;
@@ -40,6 +41,11 @@ submitBtn.addEventListener('click', () => {
     }
     createList(webName, webAdress);
 });
+
+function refresh() {
+    localStorage.clear();
+    location.reload();
+}
 
 function resetForm() {
     errorDiv.classList.add('sr-only');

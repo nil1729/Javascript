@@ -47,7 +47,9 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 
 * This `Bookmarking App` has a beautiful UI styled with *Bootstrap*, the user can add a Bookmark of his favourite Site by filling the input and click on `Add Bookmark` button after that he can *Visit* this *Site* using **`Visit`** button, or remove it using the **Delete** button.
 
-* The user's Bookmarks List is stored in the local storage, so when he refreshes the page, he can always find the list there.
+* The user's Bookmarked List is stored in the local storage, so when he refreshes the page, he can always find the list there.
+
+* There is the possibility for the user, to clear the Bookmarked List, by clicking the **Refresh** button, at the bottom left corner of our app.
 
 # Music Maker #
 
