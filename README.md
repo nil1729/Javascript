@@ -39,9 +39,9 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 
 # Bookmarking Application #
 
-Visit [here](https://nil1729.github.io/Javascript/bookmarking-app/) to see how it Works.
+#### Visit [here](https://nil1729.github.io/Javascript/bookmarking-app/) to see how it Works.
 
-### About To Do List ###
+### About Bookmarking Application ###
 
 * In this App, I use vanilla Javascript to create a beautiful and functional **Bookmarking App**
 
