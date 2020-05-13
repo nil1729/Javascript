@@ -37,6 +37,18 @@ Visit [here](https://nil1729.github.io/Javascript/To-Do-List/) to see how it Wor
 
 * The to do list app, shows the today's date to the user, for that I used a method called **toLocaleDateString**
 
+# Bookmarking Application #
+
+Visit [here](https://nil1729.github.io/Javascript/bookmarking-app/) to see how it Works.
+
+### About To Do List ###
+
+* In this App, I use vanilla Javascript to create a beautiful and functional **Bookmarking App**
+
+* This `Bookmarking App` has a beautiful UI styled with *Bootstrap*, the user can add a Bookmark of his favourite Site by filling the input and click on `Add Bookmark` button after that he can *Visit* this *Site* using **`Visit`** button, or remove it using the **Delete** button.
+
+* The user's Bookmarks List is stored in the local storage, so when he refreshes the page, he can always find the list there.
+
 # Music Maker #
 
 * Visit [here](https://nil1729.github.io/Javascript/Music-Maker/) to see how it Works.
