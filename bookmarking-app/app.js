@@ -108,7 +108,11 @@ function saveData(data) {
 
 function loadData() {
     const data = localStorage.getItem('Bookmarks');
-    return JSON.parse(data);
+    if (data) {
+        return JSON.parse(data);
+    } else {
+        return [];
+    }
 }
 
 function validURL(str) {
