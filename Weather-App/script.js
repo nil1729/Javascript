@@ -50,7 +50,7 @@ function getLocation() {
 getLocation();
 
 function getWeather() {
-    let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=82005d27a116c2880c8f0fcb866998a0`;
+    let api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=79f53909e8f32d9e62fbf88d5ecaf8dd`;
     fetch(api)
         .then(function(resp) {
             return resp.json();
