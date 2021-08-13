@@ -14,3 +14,22 @@ button {
 .day-slot {
 	cursor: pointer;
 }
+
+.weekend {
+	pointer-events: none !important;
+}
+
+.scheduled-dates {
+	height: 520px !important;
+	overflow-y: hidden;
+}
+
+.scheduled-dates .scroll-container {
+	height: 430px !important;
+	overflow-y: scroll;
+}
+
+.bg-grey.scheduled-day-slot,
+.scheduled-day-slot {
+	background-color: rgb(184, 184, 241) !important;
+}

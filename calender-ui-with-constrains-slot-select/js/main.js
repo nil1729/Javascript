@@ -22,6 +22,8 @@ const months = [
 	'December',
 ];
 
+const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
 monthChoices.forEach(function (month) {
 	month.addEventListener('click', function (e) {
 		currentMonth = parseInt(this.getAttribute('index'));
@@ -96,9 +98,18 @@ function showCalendar(month, year) {
 			} else if (date > daysInMonth(month, year)) {
 				break;
 			} else {
-				cell = document.createElement('td');
-				cell.classList.add('border', 'day-slot');
+				const weekDayIndex = new Date(year, month, date).getDay();
 				cellText = document.createTextNode(date);
+				cell = document.createElement('td');
+				cell.id = `${year}-${month}-${date}`;
+				cell.setAttribute('week', i);
+
+				if (weekDayIndex === 0 || weekDayIndex === 6) {
+					cell.classList.add('border', 'weekend');
+				} else {
+					cell.classList.add('border', 'day-slot');
+				}
+
 				if (
 					date === today.getDate() &&
 					year === today.getFullYear() &&
@@ -106,6 +117,7 @@ function showCalendar(month, year) {
 				) {
 					cell.classList.add('bg-grey');
 				} // color today's date
+
 				cell.appendChild(cellText);
 				row.appendChild(cell);
 				date++;
@@ -114,6 +126,199 @@ function showCalendar(month, year) {
 
 		tbl.appendChild(row); // appending each row into calendar body.
 	}
+	updateScheduledDateSlots();
+}
+
+let scheduledEvents = getSavedEvents();
+
+document.addEventListener('click', (e) => {
+	if (e.target && e.target.id && e.target.classList.contains('day-slot')) {
+		let [y, m, d] = e.target.id.split('-');
+		const weekIndex = e.target.getAttribute('week');
+		let currDate = new Date(y, m, d);
+
+		if (isNaN(currDate)) return;
+
+		if (monthIsScheduled(y, m)) {
+			if (isLimitReached(y, m)) return showWarning('Maximum Limit for a month is reached!');
+			// Further Checks
+			const scheduledWeeks = monthIsScheduled(y, m).dates.map((obj) => obj.weekIndex);
+			if (scheduledWeeks.includes(weekIndex)) return;
+
+			let selectedSlotDateStr = monthIsScheduled(y, m).dates[0].date;
+			let selectedSlotWeekIndex = parseInt(monthIsScheduled(y, m).dates[0].weekIndex);
+			let selectedSlotDate = new Date(selectedSlotDateStr);
+			const isEven = selectedSlotDate.getDay() % 2 === 0;
+			const availableDateSlots = [];
+			document.querySelectorAll('#calendar-body tr td').forEach((node) => {
+				if (node && node.getAttribute('week'))
+					availableDateSlots.push({
+						dateStr: node.id,
+						weekIndex: parseInt(node.getAttribute('week')),
+					});
+			});
+
+			const desiredWeekSlot = availableDateSlots.filter((slot) => {
+				let [yy, mm, dd] = slot.dateStr.split('-');
+				const slotIsEven = new Date(yy, mm, dd).getDay() % 2 === 0;
+
+				if (Math.abs(selectedSlotWeekIndex - slot.weekIndex) % 2 === 0) {
+					return isEven === slotIsEven;
+				} else {
+					return isEven !== slotIsEven;
+				}
+			});
+			const isValidClickedSlot = desiredWeekSlot.find((slot) => slot.dateStr === e.target.id);
+			if (isValidClickedSlot) scheduledNewEvent(y, m, d, weekIndex);
+		} else {
+			scheduledNewEvent(y, m, d, weekIndex);
+		}
+		saveEvents();
+		showEventOnUI();
+	}
+});
+
+function monthIsScheduled(y, m) {
+	return scheduledEvents.find((sc) => sc.id === `${y}-${m}`);
+}
+
+function isLimitReached(y, m) {
+	let requiredMonth = scheduledEvents.find((sc) => sc.id === `${y}-${m}`);
+
+	if (!requiredMonth) return false;
+	return requiredMonth.dates.length === 4;
+}
+
+function scheduledNewEvent(y, m, d, weekIndex) {
+	let currDate = new Date(y, m, d);
+	if (monthIsScheduled(y, m)) {
+		scheduledEvents = scheduledEvents.map((sc) => {
+			if (sc.id === `${y}-${m}`) {
+				return { ...sc, dates: [...sc.dates, { date: currDate, weekIndex }] };
+			} else {
+				return sc;
+			}
+		});
+	} else {
+		let ev = {
+			id: `${y}-${m}`,
+			title: `${months[m]} ${y}`,
+			dates: [{ date: currDate, weekIndex }],
+		};
+		scheduledEvents.push(ev);
+	}
+
+	updateScheduledDateSlots();
+}
+
+function sortEvents() {
+	scheduledEvents.sort(function (a, b) {
+		const [y1, m1] = a.id.split('-');
+		const [y2, m2] = b.id.split('-');
+
+		var keyA = new Date(y1, m1),
+			keyB = new Date(y2, m2);
+
+		// Compare the 2 dates
+		if (keyA > keyB) return -1;
+		if (keyA < keyB) return 1;
+		return 0;
+	});
+	scheduledEvents.forEach(function (month) {
+		month.dates.sort(function (a, b) {
+			var keyA = new Date(a.date),
+				keyB = new Date(b.date);
+
+			// Compare the 2 dates
+			if (keyA > keyB) return -1;
+			if (keyA < keyB) return 1;
+			return 0;
+		});
+	});
+}
+
+function saveEvents() {
+	localStorage.setItem('SCHEDULED_EVENTS', JSON.stringify(scheduledEvents));
+}
+
+function getSavedEvents() {
+	if (localStorage.getItem('SCHEDULED_EVENTS')) {
+		return JSON.parse(localStorage.getItem('SCHEDULED_EVENTS'));
+	} else return [];
+}
+
+function showEventOnUI() {
+	sortEvents();
+	const eventContainer = document.getElementById('scroll-event-container');
+	eventContainer.innerHTML = '';
+	scheduledEvents.forEach(function (month) {
+		const monthlyContainer = document.createElement('div');
+		const header = document.createElement('p');
+		const headerTitle = document.createTextNode(month.title);
+		header.appendChild(headerTitle);
+		header.classList.add('lead', 'bg-light', 'px-2', 'py-1', 'mb-0', 'border');
+		monthlyContainer.appendChild(header);
+
+		// Event Showing
+		const listContainer = document.createElement('ol');
+		listContainer.classList.add('list-group', 'list-group-numbered');
+
+		month.dates.forEach((obj, index) => {
+			const listItem = document.createElement('li');
+			listItem.classList.add(
+				'list-group-item',
+				'd-flex',
+				'justify-content-between',
+				'align-items-start'
+			);
+			const date = new Date(obj.date);
+			const oddOrEven = date.getDay() % 2 === 0 ? 'Even' : 'Odd';
+			const weekday = weekDays[date.getDay()];
+
+			listItem.innerHTML = `
+				<div class="ms-2 me-auto">
+					<div class="fw-bold">${oddOrEven} Schedule</div>
+						${months[date.getMonth()]} ${date.getDate()}, ${date.getFullYear()} - ${weekday}
+					</div>
+					<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+				</div>
+			`;
+			listContainer.appendChild(listItem);
+		});
+
+		// Last
+		monthlyContainer.appendChild(listContainer);
+		monthlyContainer.classList.add('mb-2');
+		eventContainer.appendChild(monthlyContainer);
+	});
+}
+
+function updateScheduledDateSlots() {
+	scheduledEvents.forEach(function (month) {
+		month.dates.forEach(function (obj) {
+			const dateObj = new Date(obj.date);
+			const requiredSlotId = `${dateObj.getFullYear()}-${dateObj.getMonth()}-${dateObj.getDate()}`;
+			const elem = document.getElementById(requiredSlotId);
+			if (elem) {
+				elem.classList.add('scheduled-day-slot');
+			}
+		});
+	});
+}
+
+let prevWarning = null;
+function showWarning(msg) {
+	window.clearTimeout(prevWarning);
+
+	const toast = document.getElementById('liveToast');
+	const messageElement = document.getElementById('notification-message');
+	messageElement.textContent = msg;
+	toast.classList.remove('hide');
+
+	prevWarning = window.setTimeout(() => {
+		toast.classList.add('hide');
+	}, 5000);
 }
 
 showCalendar(currentMonth, currentYear);
+showEventOnUI();
