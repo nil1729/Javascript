@@ -1,0 +1,16 @@
+.navigation.navigation-bottom button.btn {
+	width: 100%;
+}
+
+button {
+	outline: none !important;
+	box-shadow: none !important;
+}
+
+.bg-grey {
+	background-color: rgb(197, 196, 196) !important;
+}
+
+.day-slot {
+	cursor: pointer;
+}

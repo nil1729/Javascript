@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Calendar UI - Work Binders</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+			rel="stylesheet"
+			integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+			crossorigin="anonymous"
+		/>
+		<script
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="./css/main.css" />
+	</head>
+	<body>
+		<div class="container mt-3">
+			<div class="navigation navigation-top mb-2 px-2 d-flex justify-content-between">
+				<div class="btn-group dropend">
+					<button
+						type="button"
+						class="btn btn-outline-dark dropdown-toggle"
+						data-bs-toggle="dropdown"
+						aria-expanded="false"
+						id="selected-month"
+					>
+						Month
+					</button>
+					<ul class="dropdown-menu month-select">
+						<li><a href="#" class="dropdown-item" index="0"> January</a></li>
+						<li><a href="#" class="dropdown-item" index="1"> February</a></li>
+						<li><a href="#" class="dropdown-item" index="2"> March</a></li>
+						<li><a href="#" class="dropdown-item" index="3"> April</a></li>
+						<li><a href="#" class="dropdown-item" index="4"> May</a></li>
+						<li><a href="#" class="dropdown-item" index="5"> June</a></li>
+						<li><a href="#" class="dropdown-item" index="6"> July</a></li>
+						<li><a href="#" class="dropdown-item" index="7"> August</a></li>
+						<li><a href="#" class="dropdown-item" index="8"> September</a></li>
+						<li><a href="#" class="dropdown-item" index="9"> October</a></li>
+						<li><a href="#" class="dropdown-item" index="10"> November</a></li>
+						<li><a href="#" class="dropdown-item" index="11"> December</a></li>
+					</ul>
+				</div>
+				<div class="btn-group">
+					<div class="btn-group dropstart" role="group">
+						<button
+							type="button"
+							class="btn btn-outline-dark dropdown-toggle"
+							data-bs-toggle="dropdown"
+							aria-expanded="false"
+							id="selected-year"
+						>
+							Year
+						</button>
+						<ul class="dropdown-menu year-select">
+							<li><a href="#" class="dropdown-item">2021</a></li>
+							<li><a href="#" class="dropdown-item">2020</a></li>
+							<li><a href="#" class="dropdown-item">2019</a></li>
+							<li><a href="#" class="dropdown-item">2018</a></li>
+							<li><a href="#" class="dropdown-item">2017</a></li>
+							<li><a href="#" class="dropdown-item">2016</a></li>
+							<li><a href="#" class="dropdown-item">2015</a></li>
+							<li><a href="#" class="dropdown-item">2014</a></li>
+							<li><a href="#" class="dropdown-item">2013</a></li>
+							<li><a href="#" class="dropdown-item">2012</a></li>
+							<li><a href="#" class="dropdown-item">2011</a></li>
+							<li><a href="#" class="dropdown-item">2010</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+			<div class="calendar-table mt-3">
+				<h4 class="bg-light py-2 px-3 border" id="calendar-title">August 2020</h4>
+				<table class="table border text-center" id="">
+					<thead>
+						<tr>
+							<th class="border" scope="col">Monday</th>
+							<th class="border" scope="col">Tuesday</th>
+							<th class="border" scope="col">Wednesday</th>
+							<th class="border" scope="col">Thursday</th>
+							<th class="border" scope="col">Friday</th>
+							<th class="border" scope="col">Saturday</th>
+							<th class="border" scope="col">Sunday</th>
+						</tr>
+					</thead>
+					<tbody id="calendar-body"></tbody>
+				</table>
+			</div>
+			<div class="d-flex justify-content-center navigation navigation-bottom px-2 mt-4">
+				<button class="btn btn-outline-dark" type="button" onclick="previous()">
+					<span aria-hidden="true" class="mx-2">&laquo;</span>
+					Previous
+				</button>
+				<div class="mx-2"></div>
+				<button class="btn btn-outline-dark" type="button" onclick="next()">
+					Next
+					<span aria-hidden="true" class="mx-2">&raquo;</span>
+				</button>
+			</div>
+		</div>
+	</body>
+	<script src="./js/main.js"></script>
+</html>
