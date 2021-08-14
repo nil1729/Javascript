@@ -126,6 +126,7 @@ function showCalendar(month, year) {
 
 		tbl.appendChild(row); // appending each row into calendar body.
 	}
+	showSectionColorWise();
 	updateScheduledDateSlots();
 }
 
@@ -318,6 +319,44 @@ function showWarning(msg) {
 	prevWarning = window.setTimeout(() => {
 		toast.classList.add('hide');
 	}, 5000);
+}
+
+function showSectionColorWise() {
+	const weeks = [];
+	document.querySelectorAll('#calendar-body tr').forEach((node) => {
+		if (node.children.length === 7 && node.firstChild.textContent !== '') {
+			weeks.push(node);
+		}
+	});
+
+	let startType = 3;
+	let otherType = 2;
+
+	for (let i = 0; i < weeks.length; i++) {
+		// let [fy, fm, fd] = weeks[i].firstChild.id.split('-');
+		// let firstDate = new Date(fy, fm, fd);
+		const childs = [];
+		weeks[i].childNodes.forEach((child) => childs.push(child));
+		if (i % 2 === 0) {
+			let firstGroup = childs.slice(1, startType + 1);
+			let secondGroup = childs.slice(startType + 1, 6);
+			firstGroup.forEach((node) => {
+				node.classList.add(`type-${startType}`);
+			});
+			secondGroup.forEach((node) => {
+				node.classList.add(`type-${otherType}`);
+			});
+		} else {
+			let firstGroup = childs.slice(1, otherType + 1);
+			let secondGroup = childs.slice(otherType + 1, 6);
+			firstGroup.forEach((node) => {
+				node.classList.add(`type-${otherType}`);
+			});
+			secondGroup.forEach((node) => {
+				node.classList.add(`type-${startType}`);
+			});
+		}
+	}
 }
 
 showCalendar(currentMonth, currentYear);

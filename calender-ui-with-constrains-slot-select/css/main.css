@@ -33,3 +33,17 @@ button {
 .scheduled-day-slot {
 	background-color: rgb(184, 184, 241) !important;
 }
+
+.table > :not(caption) > * > * {
+	padding: 0.2rem 0.2rem;
+}
+.slot-option {
+	width: fit-content;
+}
+
+.day-slot.type-3 {
+	background-color: rgb(123, 123, 218) !important;
+}
+.day-slot.type-2 {
+	background-color: rgb(240, 191, 101) !important;
+}

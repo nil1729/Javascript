@@ -86,13 +86,13 @@
 						<table class="table border text-center" id="">
 							<thead>
 								<tr>
-									<th class="border" scope="col">Sunday</th>
-									<th class="border" scope="col">Monday</th>
-									<th class="border" scope="col">Tuesday</th>
-									<th class="border" scope="col">Wednesday</th>
-									<th class="border" scope="col">Thursday</th>
-									<th class="border" scope="col">Friday</th>
-									<th class="border" scope="col">Saturday</th>
+									<th class="border" scope="col">Sun</th>
+									<th class="border" scope="col">Mon</th>
+									<th class="border" scope="col">Tue</th>
+									<th class="border" scope="col">Wed</th>
+									<th class="border" scope="col">Thu</th>
+									<th class="border" scope="col">Fri</th>
+									<th class="border" scope="col">Sat</th>
 								</tr>
 							</thead>
 							<tbody id="calendar-body"></tbody>
@@ -134,11 +134,53 @@
 		</div>
 
 		<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
-			<div id="liveToast" class="toast show hide" role="alert" aria-live="assertive" aria-atomic="true">
+			<div
+				id="liveToast"
+				class="toast show hide"
+				role="alert"
+				aria-live="assertive"
+				aria-atomic="true"
+			>
 				<div class="toast-header bg-dark text-light">
 					<span class="me-auto">Notification</span>
 				</div>
 				<div class="toast-body" id="notification-message"></div>
+			</div>
+		</div>
+
+		<!-- Button trigger modal -->
+		<button
+			type="button"
+			class="btn btn-primary visually-hidden"
+			data-bs-toggle="modal"
+			data-bs-target="#exampleModal"
+			id="modal-launch-btn"
+		>
+			Launch demo modal
+		</button>
+
+		<!-- Modal -->
+		<div
+			class="modal fade"
+			id="exampleModal"
+			tabindex="-1"
+			aria-labelledby="exampleModalLabel"
+			aria-hidden="true"
+		>
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="exampleModalLabel">Please choose a option</h5>
+						<button
+							type="button"
+							class="btn-close"
+							data-bs-dismiss="modal"
+							aria-label="Close"
+							id="option-modal-close"
+						></button>
+					</div>
+					<div class="modal-body" id="modal-body"></div>
+				</div>
 			</div>
 		</div>
 	</body>
