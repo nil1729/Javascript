@@ -42,8 +42,18 @@ button {
 }
 
 .day-slot.type-3 {
-	background-color: rgb(123, 123, 218) !important;
+	background-color: rgb(180, 180, 236) !important;
 }
 .day-slot.type-2 {
-	background-color: rgb(240, 191, 101) !important;
+	background-color: rgb(236, 201, 136) !important;
+}
+
+.day-slot.type-3.selected {
+	background-color: rgb(155, 209, 171) !important;
+	pointer-events: none !important;
+}
+
+.day-slot.type-2.selected {
+	background-color: rgb(235, 161, 225) !important;
+	pointer-events: none !important;
 }
