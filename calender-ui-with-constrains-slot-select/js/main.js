@@ -126,7 +126,6 @@ function showCalendar(month, year) {
 
 		tbl.appendChild(row); // appending each row into calendar body.
 	}
-	showSectionColorWise();
 	updateScheduledDateSlots();
 }
 
@@ -135,140 +134,47 @@ let scheduledEvents = getSavedEvents();
 document.addEventListener('click', (e) => {
 	if (e.target && e.target.id && e.target.classList.contains('day-slot')) {
 		let [y, m, d] = e.target.id.split('-');
-		const weekIndex = parseInt(e.target.getAttribute('week'));
-		let currDate = new Date(y, m, d);
-
-		if (isNaN(currDate)) return;
-
-		const validSection = e.target.className.split(' ').filter((it) => it.startsWith('group-'));
-		if (validSection.length === 0) return showWarning('This is not a valid 3-days or 2-days');
 
 		if (monthIsScheduled(y, m)) {
-			if (isLimitReached(y, m)) return showWarning('Maximum Limit for a month is reached!');
-			// Further Checks
-			const scheduledSections = monthIsScheduled(y, m).sections;
-			let lastSection = scheduledSections[scheduledSections.length - 1];
-
-			// Finding Clicked Section Details
-			const cls = document
-				.getElementById(`${y}-${m}-${d}`)
-				.className.split(' ')
-				.filter((it) => it.startsWith('group-'));
-
-			let selectedSectionLength = document.querySelectorAll(`.${cls[0]}`).length;
-			let lastSectionWeekIndex = parseInt(
-				document.querySelectorAll(`.${lastSection.id}`)[0].getAttribute('week')
-			);
-			let reqLength = lastSection.dates.length === 3 ? 2 : 3;
-
-			if (lastSectionWeekIndex > weekIndex)
-				return showWarning(`You must select in consecutive order`);
-
-			if (lastSection.dates.length === selectedSectionLength)
-				return showWarning(
-					`You have to select one ${reqLength} Days section Which is different from last selection`
-				);
-
-			// if (countAvailableWeeks() - weekIndex )
-			let [fI, lI] = countAvailableWeekIndex();
-			let remCount = 4 - scheduledSections.length;
-
-			if (lI - weekIndex > 2) {
-				scheduledNewEvent(y, m, d, weekIndex);
-			} else if (lI - weekIndex === 2) {
-				if (remCount <= 3) {
-					scheduledNewEvent(y, m, d, weekIndex);
-				}
-			} else if (lI - weekIndex == 1) {
-				if (remCount === 3) {
-					const cls = document
-						.getElementById(`${y}-${m}-${d}`)
-						.className.split(' ')
-						.filter((it) => it.startsWith('group-'));
-					let lastDay;
-					document.querySelectorAll(`.${cls[0]}`).forEach((it) => {
-						lastDay = parseDate(it.id);
-					});
-					if (lastDay.getDay() > 3)
-						return showWarning(
-							`You can't select this section now, because 4 sections have to be added for a month`
-						);
-					scheduledNewEvent(y, m, d, weekIndex);
-				} else {
-					scheduledNewEvent(y, m, d, weekIndex);
-				}
-			} else {
-				if (remCount >= 2) {
-					const cls = document
-						.getElementById(`${y}-${m}-${d}`)
-						.className.split(' ')
-						.filter((it) => it.startsWith('group-'));
-					let lastDay;
-					document.querySelectorAll(`.${cls[0]}`).forEach((it) => {
-						lastDay = parseDate(it.id);
-					});
-					if (lastDay.getDay() > 3)
-						return showWarning(
-							`You can't select this section now, because 4 sections have to be added for a month`
-						);
-					scheduledNewEvent(y, m, d, weekIndex);
-				} else {
-					scheduledNewEvent(y, m, d, weekIndex);
-				}
+			if (isLimitReached(y, m)) {
+				return showWarning('Maximum limit for a month is reached!');
 			}
+			if (findClickedWeek(e.target) !== firstValidWeek() + monthIsScheduled(y, m).sections.length) {
+				return showWarning('You must select a slot from immediate next week');
+			}
+			scheduledNewEvent(e.target);
 		} else {
-			// if (countAvailableWeeks() - weekIndex )
-			let [fI, lI] = countAvailableWeekIndex();
-
-			if (lI - weekIndex > 2) {
-				scheduledNewEvent(y, m, d, weekIndex);
-			} else if (lI - weekIndex >= 1) {
-				// Finding Clicked Section Details
-				const cls = document
-					.getElementById(`${y}-${m}-${d}`)
-					.className.split(' ')
-					.filter((it) => it.startsWith('group-'));
-				let lastDay;
-				document.querySelectorAll(`.${cls[0]}`).forEach((it) => {
-					lastDay = parseDate(it.id);
-				});
-				if (lastDay.getDay() > 3)
-					return showWarning(
-						`You can't select this section as first selection, because 4 sections have to be added for a month`
-					);
-				scheduledNewEvent(y, m, d, weekIndex);
+			if (findClickedWeek(e.target) === firstValidWeek()) {
+				scheduledNewEvent(e.target);
 			} else {
-				return showWarning(
-					`You can't select this section as first selection, because 4 sections have to be added for a month`
+				showWarning(
+					'Please choose any 3-Days or 2-Days from first week which at least started from Monday'
 				);
 			}
 		}
 		saveEvents();
-		showEventOnUI();
 	}
+
 	if (e.target && e.target.id && e.target.id.startsWith('close:')) {
-		const [c, ym, grp] = e.target.id.split(':');
-		let [y, m] = ym.split('-');
-		let requiredMonth = monthIsScheduled(y, m);
-		let grpIndex = requiredMonth.sections.findIndex((it) => it.id === grp);
-		if (grpIndex < requiredMonth.sections.length - 1)
-			return showWarning(`You must remove the last scheduled event of this month first`);
-		scheduledEvents = scheduledEvents.map((sc) => {
-			if (sc.id === ym) {
-				sc.sections = sc.sections.filter((it) => it.id !== grp);
-				return sc;
-			} else {
-				return sc;
-			}
-		});
-		updateScheduledDateSlots();
-		saveEvents();
-		showEventOnUI();
 	}
 });
 
+function firstValidWeek() {
+	let firstWeekIndex = -1;
+	document.querySelectorAll('#calendar-body tr').forEach((node, index) => {
+		if (firstWeekIndex === -1 && node.childNodes[1].textContent !== '') {
+			firstWeekIndex = index;
+		}
+	});
+	return firstWeekIndex;
+}
+
 function monthIsScheduled(y, m) {
 	return scheduledEvents.find((sc) => sc.id === `${y}-${m}`);
+}
+
+function findClickedWeek(elem) {
+	return parseInt(elem.getAttribute('week'));
 }
 
 function isLimitReached(y, m) {
@@ -278,48 +184,151 @@ function isLimitReached(y, m) {
 	return requiredMonth.sections.length === 4;
 }
 
-function scheduledNewEvent(y, m, d, weekIndex) {
-	let currDate = new Date(y, m, d);
-	if (monthIsScheduled(y, m)) {
-		scheduledEvents = scheduledEvents.map((sc) => {
-			if (sc.id === `${y}-${m}`) {
-				const cls = document
-					.getElementById(`${y}-${m}-${d}`)
-					.className.split(' ')
-					.filter((it) => it.startsWith('group-'));
-				let newGroup = { id: cls[0], dates: [] };
-				document.querySelectorAll(`.${cls[0]}`).forEach((it) => {
-					newGroup.dates.push(parseDate(it.id));
-				});
-				sc.sections.push(newGroup);
-				return sc;
-			} else {
-				return sc;
-			}
-		});
-	} else {
+function scheduledNewEvent(elem) {
+	let [y, m, d] = elem.id.split('-');
+	if (findClickedWeek(elem) === firstValidWeek()) {
 		let ev = {
 			id: `${y}-${m}`,
 			title: `${months[m]} ${y}`,
 			sections: [],
 		};
-		const cls = document
-			.getElementById(`${y}-${m}-${d}`)
-			.className.split(' ')
-			.filter((it) => it.startsWith('group-'));
-		let newGroup = { id: cls[0], dates: [] };
-		document.querySelectorAll(`.${cls[0]}`).forEach((it) => {
-			newGroup.dates.push(parseDate(it.id));
-		});
+		let clickedDate = new Date(y, m, d);
+		let firstGroupDate = new Date(clickedDate);
+		let diffFirst = clickedDate.getDay() - 1;
+		let slotType = 3 - 1;
+		if (clickedDate.getDay() > 3) {
+			diffFirst = clickedDate.getDay() - 4;
+			slotType = 2 - 1;
+		}
+		firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
+
+		let newGroup = {
+			id: dateToYMD(firstGroupDate),
+			dates: [new Date(firstGroupDate)],
+			type: slotType + 1,
+		};
+
+		while (slotType--) {
+			newGroup.dates.push(new Date(firstGroupDate.setDate(firstGroupDate.getDate() + 1)));
+		}
+
 		ev.sections.push(newGroup);
 		scheduledEvents.push(ev);
+	} else {
+		let newGroup = null;
+		if (monthIsScheduled(y, m).sections.length === 1) {
+			let clickedDate = new Date(y, m, d);
+			let firstGroupDate = new Date(clickedDate);
+			let diffFirst = clickedDate.getDay() - 1;
+			let slotType = 2 - 1;
+			if (clickedDate.getDay() > 2) {
+				diffFirst = clickedDate.getDay() - 3;
+				slotType = 3 - 1;
+			}
+			if (monthIsScheduled(y, m).sections[0].type === slotType + 1) {
+				return showWarning(`You have to select a ${slotType + 1}-Days slot`);
+			}
+			firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
+
+			let newGroup = {
+				id: dateToYMD(firstGroupDate),
+				dates: [new Date(firstGroupDate)],
+				type: slotType + 1,
+			};
+
+			while (slotType--) {
+				newGroup.dates.push(new Date(firstGroupDate.setDate(firstGroupDate.getDate() + 1)));
+			}
+			scheduledEvents.map((it) => {
+				if (it.id === monthIsScheduled(y, m).id) {
+					monthIsScheduled(y, m).sections.push(newGroup);
+				} else return it;
+			});
+		} else if (monthIsScheduled(y, m).sections.length === 2) {
+			let clickedDate = new Date(y, m, d);
+			let firstGroupDate = new Date(clickedDate);
+			let diffFirst = clickedDate.getDay() - 1;
+			let slotType = 3 - 1;
+
+			if (clickedDate.getDay() > 3) {
+				diffFirst = clickedDate.getDay() - 4;
+				slotType = 2 - 1;
+			}
+
+			if (slotType + 1 === 3) {
+				return showWarning(`You have to select a 2-Days slot for this week`);
+			}
+			firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
+
+			let newGroup = {
+				id: dateToYMD(firstGroupDate),
+				dates: [new Date(firstGroupDate)],
+				type: slotType + 1,
+			};
+
+			while (slotType--) {
+				newGroup.dates.push(new Date(firstGroupDate.setDate(firstGroupDate.getDate() + 1)));
+			}
+			scheduledEvents.map((it) => {
+				if (it.id === monthIsScheduled(y, m).id) {
+					monthIsScheduled(y, m).sections.push(newGroup);
+				} else return it;
+			});
+		} else {
+			let clickedDate = new Date(y, m, d);
+			let firstGroupDate = new Date(clickedDate);
+			let diffFirst = clickedDate.getDay() - 1;
+			let slotType = 2 - 1;
+
+			if (clickedDate.getDay() > 2) {
+				diffFirst = clickedDate.getDay() - 3;
+				slotType = 3 - 1;
+			}
+
+			if (slotType + 1 === 2) {
+				return showWarning(`You have to select a 3-Days slot for this week`);
+			}
+			firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
+
+			let newGroup = {
+				id: dateToYMD(firstGroupDate),
+				dates: [new Date(firstGroupDate)],
+				type: slotType + 1,
+			};
+
+			while (slotType--) {
+				newGroup.dates.push(new Date(firstGroupDate.setDate(firstGroupDate.getDate() + 1)));
+			}
+			scheduledEvents.map((it) => {
+				if (it.id === monthIsScheduled(y, m).id) {
+					monthIsScheduled(y, m).sections.push(newGroup);
+				} else return it;
+			});
+
+			// Next Month
+			let newMn = (parseInt(m) + 1) % 12;
+			let newYr = newMn === 0 ? parseInt(y) + 1 : parseInt(y);
+			let ev = {
+				id: `${newYr}-${newMn}`,
+				title: `${months[newMn]} ${newYr}`,
+				sections: [newGroup],
+			};
+			if (new Date(newGroup.dates[newGroup.dates.length - 1]).getMonth() === newMn) {
+				scheduledEvents.push(ev);
+			}
+		}
 	}
 	updateScheduledDateSlots();
+	showEventOnUI();
 }
 
-function parseDate(id) {
+function parseDate(id, arg) {
 	let [y, m, d] = id.split('-');
 	return new Date(y, m, d);
+}
+
+function dateToYMD(date) {
+	return `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
 }
 
 function sortEvents() {
@@ -338,12 +347,12 @@ function sortEvents() {
 }
 
 function saveEvents() {
-	localStorage.setItem('SCHEDULED_EVENTS', JSON.stringify(scheduledEvents));
+	localStorage.setItem('SCHEDULED_EVENTS_V3', JSON.stringify(scheduledEvents));
 }
 
 function getSavedEvents() {
-	if (localStorage.getItem('SCHEDULED_EVENTS')) {
-		return JSON.parse(localStorage.getItem('SCHEDULED_EVENTS'));
+	if (localStorage.getItem('SCHEDULED_EVENTS_V3')) {
+		return JSON.parse(localStorage.getItem('SCHEDULED_EVENTS_V3'));
 	} else return [];
 }
 
@@ -402,20 +411,19 @@ function showEventOnUI() {
 
 function updateScheduledDateSlots() {
 	document.querySelectorAll('#calendar-body tr td').forEach((node) => {
-		node.classList.remove('selected');
+		node.classList.remove('selected', 'type-3', 'type-2');
 	});
-	scheduledEvents.forEach(function (month) {
-		month.sections.forEach(function (obj) {
-			obj.dates.forEach((dtStr) => {
-				const dateObj = new Date(dtStr);
-				const requiredSlotId = `${dateObj.getFullYear()}-${dateObj.getMonth()}-${dateObj.getDate()}`;
-				const elem = document.getElementById(requiredSlotId);
-				if (elem) {
-					elem.classList.add('selected');
+	let currMnObj = monthIsScheduled(currentYear, currentMonth);
+	if (currMnObj) {
+		currMnObj.sections.forEach((sc) => {
+			sc.dates.forEach((dt) => {
+				let el = document.getElementById(`${dateToYMD(new Date(dt))}`);
+				if (el) {
+					el.classList.add('selected', `type-${sc.type}`);
 				}
 			});
 		});
-	});
+	}
 }
 
 let prevWarning = null;
@@ -430,63 +438,6 @@ function showWarning(msg) {
 	prevWarning = window.setTimeout(() => {
 		toast.classList.add('hide');
 	}, 5000);
-}
-
-function countAvailableWeekIndex() {
-	const weeks = [];
-	document.querySelectorAll('#calendar-body tr').forEach((node) => {
-		if (node.children.length === 7 && node.firstChild.textContent !== '') {
-			weeks.push(node);
-		}
-	});
-	return [
-		parseInt(weeks[0].firstChild.getAttribute('week')),
-		parseInt(weeks[weeks.length - 1].firstChild.getAttribute('week')),
-	];
-}
-
-function showSectionColorWise() {
-	const weeks = [];
-	document.querySelectorAll('#calendar-body tr').forEach((node) => {
-		if (node.children.length === 7 && node.firstChild.textContent !== '') {
-			weeks.push(node);
-		}
-	});
-
-	let startType = 3;
-	let otherType = 2;
-
-	for (let i = 0; i < weeks.length; i++) {
-		// let [fy, fm, fd] = weeks[i].firstChild.id.split('-');
-		// let firstDate = new Date(fy, fm, fd);
-		const childs = [];
-		weeks[i].childNodes.forEach((child) => childs.push(child));
-		if (i % 2 === 0) {
-			let firstGroup = childs.slice(1, startType + 1);
-			let secondGroup = childs.slice(startType + 1, 6);
-
-			let idFirstGr = firstGroup[0].id;
-			let idSecondGr = secondGroup[0].id;
-
-			firstGroup.forEach((node) => {
-				node.classList.add(`type-${startType}`, `group-${idFirstGr}`);
-			});
-			secondGroup.forEach((node) => {
-				node.classList.add(`type-${otherType}`, `group-${idSecondGr}`);
-			});
-		} else {
-			let firstGroup = childs.slice(1, otherType + 1);
-			let secondGroup = childs.slice(otherType + 1, 6);
-			let idFirstGr = firstGroup[0].id;
-			let idSecondGr = secondGroup[0].id;
-			firstGroup.forEach((node) => {
-				node.classList.add(`type-${otherType}`, `group-${idFirstGr}`);
-			});
-			secondGroup.forEach((node) => {
-				node.classList.add(`type-${startType}`, `group-${idSecondGr}`);
-			});
-		}
-	}
 }
 
 showCalendar(currentMonth, currentYear);
