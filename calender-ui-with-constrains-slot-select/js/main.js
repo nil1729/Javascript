@@ -144,7 +144,7 @@ document.addEventListener('click', (e) => {
 		if (today.getMonth() > 0 && today.getMonth() > newMn) {
 			return showWarning('You can only select from ongoing or following month');
 		}
-		if (newMn !== nextMn) {
+		if (newMn !== nextMn && today.getMonth() !== newMn) {
 			return showWarning('You can only select from ongoing or following month');
 		}
 		if (e.target.classList.contains('selected')) {
