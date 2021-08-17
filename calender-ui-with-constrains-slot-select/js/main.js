@@ -379,7 +379,7 @@ function scheduledNewEvent(elem) {
 		}
 	}
 	updateScheduledDateSlots();
-	// showEventOnUI();
+	showEventOnUI();
 }
 
 function parseDate(id, arg) {
