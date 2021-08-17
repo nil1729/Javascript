@@ -155,18 +155,15 @@ document.addEventListener('click', (e) => {
 			if (isLimitReached(y, m)) {
 				return showWarning('Maximum limit for a month is reached!');
 			}
-			if (findClickedWeek(e.target) !== firstValidWeek() + monthIsScheduled(y, m).sections.length) {
-				return showWarning('You must select a slot from immediate next week');
+			if (
+				!e.target.classList.contains('type-2-unselected') &&
+				!e.target.classList.contains('type-3-unselected')
+			) {
+				return showWarning('This is not valid selection slot');
 			}
 			scheduledNewEvent(e.target);
 		} else {
-			if (findClickedWeek(e.target) === firstValidWeek()) {
-				scheduledNewEvent(e.target);
-			} else {
-				showWarning(
-					'Please choose any 3-Days or 2-Days from first week which at least started from Monday'
-				);
-			}
+			scheduledNewEvent(e.target);
 		}
 		saveEvents();
 	}
@@ -205,15 +202,19 @@ function deleteEvent(elem) {
 	});
 
 	let sectionId = dateToYMD(parseDate(dates[0].id));
+	// Next Month Check
+	let newMn = (parseInt(m) + 1) % 12;
+	let newYr = newMn === 0 ? parseInt(y) + 1 : parseInt(y);
+
 	scheduledEvents = scheduledEvents.map(function (it) {
-		if (monthIsScheduled(y, m).id === it.id) {
+		if (monthIsScheduled(y, m).id === it.id || it.id === `${newYr}-${newMn}`) {
 			let mn = monthIsScheduled(y, m);
 			mn.sections = mn.sections.filter((sc) => sc.id !== sectionId);
 			return mn;
 		} else return it;
 	});
-	scheduledEvents = scheduledEvents.filter((month) => month.sections.length > 0);
 
+	scheduledEvents = scheduledEvents.filter((month) => month.sections.length > 0);
 	saveEvents();
 	updateScheduledDateSlots();
 	showEventOnUI();
@@ -246,140 +247,89 @@ function isLimitReached(y, m) {
 
 function scheduledNewEvent(elem) {
 	let [y, m, d] = elem.id.split('-');
-	if (findClickedWeek(elem) === firstValidWeek()) {
+	if (monthIsScheduled(y, m)) {
+		scheduledEvents = scheduledEvents.map((sc) => {
+			if (sc.id === `${y}-${m}`) {
+				const weekIndex = parseInt(elem.getAttribute('week'));
+				const cls = elem.className.split(' ').filter((it) => it.endsWith('unselected'));
+				const slotType = cls[0].split('-')[1];
+				let dates = [];
+				document.querySelectorAll(`.${cls[0]}`).forEach((node) => {
+					if (parseInt(node.getAttribute('week')) === weekIndex) {
+						dates.push(parseDate(node.id));
+					}
+				});
+				if (parseInt(slotType) > dates.length) {
+					let rem = parseInt(slotType) - dates.length;
+				}
+				let newGroup = { id: `${dateToYMD(dates[0])}`, dates: dates, type: slotType };
+
+				if (parseInt(slotType) > dates.length) {
+					let rem = parseInt(slotType) - dates.length;
+					let lastGroupDate = new Date(dates[dates.length - 1]);
+					while (rem > 0) {
+						newGroup.dates.push(new Date(lastGroupDate.setDate(lastGroupDate.getDate() + 1)));
+						rem--;
+					}
+				}
+
+				// Next Month
+				let newMn = (parseInt(m) + 1) % 12;
+				let newYr = newMn === 0 ? parseInt(y) + 1 : parseInt(y);
+				let newEv = {
+					id: `${newYr}-${newMn}`,
+					title: `${months[newMn]} ${newYr}`,
+					sections: [newGroup],
+				};
+				if (new Date(newGroup.dates[newGroup.dates.length - 1]).getMonth() === newMn) {
+					scheduledEvents.push(newEv);
+				}
+
+				sc.sections.push(newGroup);
+				return sc;
+			} else {
+				return sc;
+			}
+		});
+	} else {
 		let ev = {
 			id: `${y}-${m}`,
 			title: `${months[m]} ${y}`,
 			sections: [],
 		};
-		let clickedDate = new Date(y, m, d);
-		let firstGroupDate = new Date(clickedDate);
-		let diffFirst = clickedDate.getDay() - 1;
-		let slotType = 3 - 1;
-		if (clickedDate.getDay() > 3) {
-			diffFirst = clickedDate.getDay() - 4;
-			slotType = 2 - 1;
-		}
-		if (slotType + 1 === 2) {
-			return showWarning(`You have to select a 3-Days slot from first week`);
-		}
+		const weekIndex = parseInt(elem.getAttribute('week'));
+		const cls = elem.className.split(' ').filter((it) => it.endsWith('unselected'));
+		const slotType = cls[0].split('-')[1];
+		let dates = [];
+		document.querySelectorAll(`.${cls[0]}`).forEach((node) => {
+			if (parseInt(node.getAttribute('week')) === weekIndex) {
+				dates.push(parseDate(node.id));
+			}
+		});
+		let newGroup = { id: `${dateToYMD(dates[0])}`, dates: dates, type: slotType };
 
-		firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
-
-		let newGroup = {
-			id: dateToYMD(firstGroupDate),
-			dates: [new Date(firstGroupDate)],
-			type: slotType + 1,
-		};
-
-		while (slotType--) {
-			newGroup.dates.push(new Date(firstGroupDate.setDate(firstGroupDate.getDate() + 1)));
+		if (parseInt(slotType) > dates.length) {
+			let rem = parseInt(slotType) - dates.length;
+			let lastGroupDate = new Date(dates[dates.length - 1]);
+			while (rem > 0) {
+				newGroup.dates.push(new Date(lastGroupDate.setDate(lastGroupDate.getDate() + 1)));
+				rem--;
+			}
 		}
 
 		ev.sections.push(newGroup);
 		scheduledEvents.push(ev);
-	} else {
-		let newGroup = null;
-		if (monthIsScheduled(y, m).sections.length === 1) {
-			let clickedDate = new Date(y, m, d);
-			let firstGroupDate = new Date(clickedDate);
-			let diffFirst = clickedDate.getDay() - 1;
-			let slotType = 2 - 1;
-			if (clickedDate.getDay() > 2) {
-				diffFirst = clickedDate.getDay() - 3;
-				slotType = 3 - 1;
-			}
-			if (slotType + 1 === 3) {
-				return showWarning(`You have to select a 2-Days slot from first week`);
-			}
-			firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
 
-			let newGroup = {
-				id: dateToYMD(firstGroupDate),
-				dates: [new Date(firstGroupDate)],
-				type: slotType + 1,
-			};
-
-			while (slotType--) {
-				newGroup.dates.push(new Date(firstGroupDate.setDate(firstGroupDate.getDate() + 1)));
-			}
-			scheduledEvents.map((it) => {
-				if (it.id === monthIsScheduled(y, m).id) {
-					monthIsScheduled(y, m).sections.push(newGroup);
-				} else return it;
-			});
-		} else if (monthIsScheduled(y, m).sections.length === 2) {
-			let clickedDate = new Date(y, m, d);
-			let firstGroupDate = new Date(clickedDate);
-			let diffFirst = clickedDate.getDay() - 1;
-			let slotType = 3 - 1;
-
-			if (clickedDate.getDay() > 3) {
-				diffFirst = clickedDate.getDay() - 4;
-				slotType = 2 - 1;
-			}
-
-			if (slotType + 1 === 3) {
-				return showWarning(`You have to select a 2-Days slot for this week`);
-			}
-			firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
-
-			let newGroup = {
-				id: dateToYMD(firstGroupDate),
-				dates: [new Date(firstGroupDate)],
-				type: slotType + 1,
-			};
-
-			while (slotType--) {
-				newGroup.dates.push(new Date(firstGroupDate.setDate(firstGroupDate.getDate() + 1)));
-			}
-			scheduledEvents.map((it) => {
-				if (it.id === monthIsScheduled(y, m).id) {
-					monthIsScheduled(y, m).sections.push(newGroup);
-				} else return it;
-			});
-		} else {
-			let clickedDate = new Date(y, m, d);
-			let firstGroupDate = new Date(clickedDate);
-			let diffFirst = clickedDate.getDay() - 1;
-			let slotType = 2 - 1;
-
-			if (clickedDate.getDay() > 2) {
-				diffFirst = clickedDate.getDay() - 3;
-				slotType = 3 - 1;
-			}
-
-			if (slotType + 1 === 2) {
-				return showWarning(`You have to select a 3-Days slot for this week`);
-			}
-			firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
-
-			let newGroup = {
-				id: dateToYMD(firstGroupDate),
-				dates: [new Date(firstGroupDate)],
-				type: slotType + 1,
-			};
-
-			while (slotType--) {
-				newGroup.dates.push(new Date(firstGroupDate.setDate(firstGroupDate.getDate() + 1)));
-			}
-			scheduledEvents.map((it) => {
-				if (it.id === monthIsScheduled(y, m).id) {
-					monthIsScheduled(y, m).sections.push(newGroup);
-				} else return it;
-			});
-
-			// Next Month
-			let newMn = (parseInt(m) + 1) % 12;
-			let newYr = newMn === 0 ? parseInt(y) + 1 : parseInt(y);
-			let ev = {
-				id: `${newYr}-${newMn}`,
-				title: `${months[newMn]} ${newYr}`,
-				sections: [newGroup],
-			};
-			if (new Date(newGroup.dates[newGroup.dates.length - 1]).getMonth() === newMn) {
-				scheduledEvents.push(ev);
-			}
+		// Next Month
+		let newMn = (parseInt(m) + 1) % 12;
+		let newYr = newMn === 0 ? parseInt(y) + 1 : parseInt(y);
+		let newEv = {
+			id: `${newYr}-${newMn}`,
+			title: `${months[newMn]} ${newYr}`,
+			sections: [newGroup],
+		};
+		if (new Date(newGroup.dates[newGroup.dates.length - 1]).getMonth() === newMn) {
+			scheduledEvents.push(newEv);
 		}
 	}
 	updateScheduledDateSlots();
