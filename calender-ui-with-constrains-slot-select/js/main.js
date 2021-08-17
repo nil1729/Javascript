@@ -138,11 +138,15 @@ document.addEventListener('click', (e) => {
 
 		let newMn = parseInt(m);
 		let today = new Date();
+		let nextMn = (new Date().getMonth() + 1) % 12;
+		// let next2Mn = (nextMn + 1) % 12;
 
 		if (today.getMonth() > 0 && today.getMonth() > newMn) {
-			return showWarning('You can only select from ongoing or future months');
+			return showWarning('You can only select from ongoing or following month');
 		}
-
+		if (newMn !== nextMn) {
+			return showWarning('You can only select from ongoing or following month');
+		}
 		if (e.target.classList.contains('selected')) {
 			return deleteEvent(e.target);
 		}

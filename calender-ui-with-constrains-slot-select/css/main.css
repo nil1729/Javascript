@@ -87,3 +87,10 @@ ul.dropdown-menu li a {
 .date-str-selected-events-header {
 	font-size: 14px;
 }
+.submit-btn-container {
+	position: relative;
+}
+.submit-btn-container button {
+	position: fixed;
+	top: 85vh;
+}
