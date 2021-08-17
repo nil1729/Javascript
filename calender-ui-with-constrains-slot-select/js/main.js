@@ -411,12 +411,12 @@ function sortEvents() {
 }
 
 function saveEvents() {
-	localStorage.setItem('SCHEDULED_EVENTS_V5', JSON.stringify(scheduledEvents));
+	localStorage.setItem('SCHEDULED_EVENTS_V10', JSON.stringify(scheduledEvents));
 }
 
 function getSavedEvents() {
-	if (localStorage.getItem('SCHEDULED_EVENTS_V5')) {
-		return JSON.parse(localStorage.getItem('SCHEDULED_EVENTS_V5'));
+	if (localStorage.getItem('SCHEDULED_EVENTS_V10')) {
+		return JSON.parse(localStorage.getItem('SCHEDULED_EVENTS_V10'));
 	} else return [];
 }
 
