@@ -28,10 +28,10 @@
 			<div class="row">
 				<div class="calendar-ui col-6">
 					<div class="navigation navigation-top mb-2 px-2 d-flex justify-content-between">
-						<div class="btn-group dropend">
+						<div class="btn-group btn-sm dropend">
 							<button
 								type="button"
-								class="btn btn-outline-dark dropdown-toggle"
+								class="btn btn-sm btn-outline-dark dropdown-toggle"
 								data-bs-toggle="dropdown"
 								aria-expanded="false"
 								id="selected-month"
@@ -53,11 +53,11 @@
 								<li><a href="#" class="dropdown-item" index="11"> December</a></li>
 							</ul>
 						</div>
-						<div class="btn-group">
+						<div class="btn-group btn-sm">
 							<div class="btn-group dropstart" role="group">
 								<button
 									type="button"
-									class="btn btn-outline-dark dropdown-toggle"
+									class="btn btn-sm btn-outline-dark dropdown-toggle"
 									data-bs-toggle="dropdown"
 									aria-expanded="false"
 									id="selected-year"
@@ -82,10 +82,10 @@
 						</div>
 					</div>
 					<div class="calendar-table mt-3">
-						<h4 class="bg-light py-2 px-3 border" id="calendar-title">August 2020</h4>
+						<h6 class="bg-light py-1 px-3 border" id="calendar-title">August 2020</h6>
 						<table class="table border text-center" id="">
 							<thead>
-								<tr>
+								<tr style="font-size: 15px">
 									<th class="border" scope="col">Sun</th>
 									<th class="border" scope="col">Mon</th>
 									<th class="border" scope="col">Tue</th>
@@ -98,40 +98,37 @@
 							<tbody id="calendar-body"></tbody>
 						</table>
 					</div>
-					<div class="d-flex justify-content-center navigation navigation-bottom px-2 mt-4">
-						<button class="btn btn-outline-dark" type="button" onclick="previous()">
+					<div class="d-flex justify-content-center navigation navigation-bottom px-2 mt-2">
+						<button class="btn btn-sm btn-outline-dark" type="button" onclick="previous()">
 							<span aria-hidden="true" class="mx-2">&laquo;</span>
 							Previous
 						</button>
 						<div class="mx-2"></div>
-						<button class="btn btn-outline-dark" type="button" onclick="next()">
+						<button class="btn btn-sm btn-outline-dark" type="button" onclick="next()">
 							Next
 							<span aria-hidden="true" class="mx-2">&raquo;</span>
 						</button>
 					</div>
+					<div class="scheduled-dates border pt-2">
+						<h6 class="bg-light py-1 px-3 border mt-2 text-center" id="calendar-title">
+							Selections
+						</h6>
+						<div class="scroll-container" id="scroll-event-container" style="font-size: 15px"></div>
+					</div>
 					<div class="border rules my-3 bg-light px-3">
-						<h5 class="my-1">Guidelines</h5>
-						<ul>
+						<h6 class="my-1">Guidelines</h6>
+						<ul style="font-size: 15px">
 							<li>No weekends (Sunday and Saturday)</li>
 							<li>You can select up-to 4 slots for a particular month</li>
 							<li>
 								if you select an odd number slot then your subsequent selection must be an even
 								number slot and vice versa
 							</li>
-							<li>
-								For 3rd Selection, you must select 2-Days slot and for 4th Selection, you must
-								select a 3-Days Slot
-							</li>
 						</ul>
 					</div>
 				</div>
-				<div class="col-2 text-center">
+				<div class="col-4">
 					<button class="btn btn-outline-primary" id="submit-btn">Submit</button>
-				</div>
-				<div class="scheduled-dates border col-4 pt-2">
-					<h5 class="text-center">Scheduled Events</h5>
-					<hr />
-					<div class="scroll-container" id="scroll-event-container"></div>
 				</div>
 			</div>
 		</div>

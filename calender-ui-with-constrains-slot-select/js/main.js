@@ -26,14 +26,6 @@ const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 
 monthChoices.forEach(function (month) {
 	month.addEventListener('click', function (e) {
-		let newMn = parseInt(this.getAttribute('index'));
-		let today = new Date();
-
-		if (today.getMonth() > 0 && today.getMonth() > newMn) {
-			return showWarning('You can only select from ongoing or future months');
-		} else if (today.getMonth() === 0 && today.getFullYear() > currentYear) {
-			return showWarning('You can only select from ongoing or future months');
-		}
 		currentMonth = parseInt(this.getAttribute('index'));
 		showCalendar(currentMonth, currentYear);
 	});
@@ -41,12 +33,6 @@ monthChoices.forEach(function (month) {
 
 yearChoices.forEach(function (year) {
 	year.addEventListener('click', function (e) {
-		let newYr = parseInt(this.textContent);
-		let today = new Date();
-
-		if (today.getFullYear() > newYr || (today.getMonth() === 0 && today.getFullYear() > newYr)) {
-			return showWarning('You can only select from ongoing or future years ');
-		}
 		currentYear = parseInt(this.textContent);
 		showCalendar(currentMonth, currentYear);
 	});
@@ -59,16 +45,6 @@ function next() {
 }
 
 function previous() {
-	let newMn = currentMonth === 0 ? 11 : currentMonth - 1;
-	let newYr = currentMonth === 0 ? currentYear - 1 : currentYear;
-	let today = new Date();
-
-	if (today.getMonth() > 0 && today.getMonth() > newMn && today.getFullYear() >= newYr) {
-		return showWarning('You can only select from ongoing or future months');
-	} else if (today.getMonth() === 0 && today.getFullYear() > newYr) {
-		return showWarning('You can only select from ongoing or future months');
-	}
-
 	currentYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 	currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
 	showCalendar(currentMonth, currentYear);
@@ -151,17 +127,25 @@ function showCalendar(month, year) {
 		tbl.appendChild(row); // appending each row into calendar body.
 	}
 	updateScheduledDateSlots();
+	showSectionColorWise();
 }
 
 let scheduledEvents = getSavedEvents();
 
 document.addEventListener('click', (e) => {
 	if (e.target && e.target.id && e.target.classList.contains('day-slot')) {
+		let [y, m, d] = e.target.id.split('-');
+
+		let newMn = parseInt(m);
+		let today = new Date();
+
+		if (today.getMonth() > 0 && today.getMonth() > newMn) {
+			return showWarning('You can only select from ongoing or future months');
+		}
+
 		if (e.target.classList.contains('selected')) {
 			return deleteEvent(e.target);
 		}
-
-		let [y, m, d] = e.target.id.split('-');
 
 		if (monthIsScheduled(y, m)) {
 			if (isLimitReached(y, m)) {
@@ -180,16 +164,30 @@ document.addEventListener('click', (e) => {
 				);
 			}
 		}
-		// saveEvents();
+		saveEvents();
 	}
 
 	if (e.target && e.target.id && e.target.id.startsWith('close:')) {
 	}
 });
 
-document.getElementById('submit-btn').addEventListener('click', function (e) {
-	saveEvents();
-	showEventOnUI();
+document.getElementById('submit-btn').addEventListener('click', async function (e) {
+	document.getElementById('submit-btn').textContent = 'Saving Selections ...';
+	document.getElementById('submit-btn').setAttribute('disabled', 'disabled');
+	const resp = await fetch('http://httpbin.org/post', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json', accept: 'application/json' },
+		body: JSON.stringify(scheduledEvents),
+	});
+	const data = await resp.json();
+	console.log(data);
+	document.getElementById('submit-btn').textContent = 'Selection Saved';
+	document.getElementById('submit-btn').classList.add('btn-outline-success');
+	setTimeout(() => {
+		document.getElementById('submit-btn').removeAttribute('disabled');
+		document.getElementById('submit-btn').textContent = 'Submit';
+		document.getElementById('submit-btn').classList.remove('btn-outline-success');
+	}, 2000);
 });
 
 function deleteEvent(elem) {
@@ -212,9 +210,9 @@ function deleteEvent(elem) {
 	});
 	scheduledEvents = scheduledEvents.filter((month) => month.sections.length > 0);
 
-	// saveEvents();
+	saveEvents();
 	updateScheduledDateSlots();
-	// showEventOnUI();
+	showEventOnUI();
 }
 
 function firstValidWeek() {
@@ -427,7 +425,7 @@ function showEventOnUI() {
 		const header = document.createElement('p');
 		const headerTitle = document.createTextNode(month.title);
 		header.appendChild(headerTitle);
-		header.classList.add('lead', 'bg-light', 'px-2', 'py-1', 'mb-0', 'border');
+		header.classList.add('bg-light', 'px-2', 'py-1', 'mb-0', 'border');
 		monthlyContainer.appendChild(header);
 
 		// Event Showing
@@ -455,10 +453,10 @@ function showEventOnUI() {
 
 			listItem.innerHTML = `
 				<div class="ms-2 me-auto">
-					<div class="fw-bold">${obj.dates.length} Days Schedule</div>
+					<div class="fw-bold date-str-selected-events-header">${obj.dates.length} Days Schedule</div>
+					<div class="date-str-selected-events">
 						${datesStr}
 					</div>
-					<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close" id="close:${month.id}:${obj.id}"></button>
 				</div>
 			`;
 			listContainer.appendChild(listItem);
@@ -493,6 +491,41 @@ function updateScheduledDateSlots() {
 			});
 		});
 	}
+}
+
+function showSectionColorWise() {
+	const weeks = [];
+	document.querySelectorAll('#calendar-body tr').forEach((node) => {
+		if (node.children.length >= 1 && node.firstChild.textContent !== '') {
+			weeks.push(node);
+		}
+	});
+
+	weeks.forEach((w, index) => {
+		const childs = [];
+		w.childNodes.forEach((child) => childs.push(child));
+		if (index === 0) {
+			let firstGroup = childs.slice(1, 4);
+			firstGroup.forEach((node) => {
+				node.classList.add(`type-3-unselected`);
+			});
+		} else if (index === 1) {
+			let firstGroup = childs.slice(1, 3);
+			firstGroup.forEach((node) => {
+				node.classList.add(`type-2-unselected`);
+			});
+		} else if (index === 2) {
+			let firstGroup = childs.slice(4, 6);
+			firstGroup.forEach((node) => {
+				node.classList.add(`type-2-unselected`);
+			});
+		} else {
+			let firstGroup = childs.slice(3, 6);
+			firstGroup.forEach((node) => {
+				node.classList.add(`type-3-unselected`);
+			});
+		}
+	});
 }
 
 let prevWarning = null;

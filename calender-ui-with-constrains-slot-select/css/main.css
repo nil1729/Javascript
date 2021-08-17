@@ -20,12 +20,12 @@ button {
 }
 
 .scheduled-dates {
-	height: 520px !important;
+	height: 450px !important;
 	overflow-y: hidden;
 }
 
 .scheduled-dates .scroll-container {
-	height: 430px !important;
+	height: 390px !important;
 	overflow-y: scroll;
 }
 
@@ -41,8 +41,16 @@ button {
 	width: fit-content;
 }
 
+.day-slot.type-3-unselected {
+	background-color: rgb(199, 226, 199);
+}
+
+.day-slot.type-2-unselected {
+	background-color: rgb(243, 243, 184) !important;
+}
+
 .day-slot.type-3.selected {
-	background-color: purple !important;
+	background-color: darkgreen !important;
 	color: white !important;
 }
 
@@ -51,9 +59,10 @@ button {
 }
 
 #calendar-body tr {
-	line-height: 17.5px;
-	min-height: 17.5px;
-	height: 17.5px;
+	line-height: 16px;
+	min-height: 16px;
+	height: 16px;
+	font-size: 14px;
 }
 
 #calendar-body tr:last-child {
@@ -65,4 +74,16 @@ button {
 .table-responsive,
 .table-bordered {
 	height: 100%;
+}
+table thead tr th {
+	font-size: 14px;
+}
+ul.dropdown-menu li a {
+	font-size: 14px;
+}
+.date-str-selected-events {
+	font-size: 13.5px;
+}
+.date-str-selected-events-header {
+	font-size: 14px;
 }
