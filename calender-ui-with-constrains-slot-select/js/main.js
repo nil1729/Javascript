@@ -26,6 +26,14 @@ const weekDays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 
 monthChoices.forEach(function (month) {
 	month.addEventListener('click', function (e) {
+		let newMn = parseInt(this.getAttribute('index'));
+		let today = new Date();
+
+		if (today.getMonth() > 0 && today.getMonth() > newMn) {
+			return showWarning('You can only select from ongoing or future months');
+		} else if (today.getMonth() === 0 && today.getFullYear() > currentYear) {
+			return showWarning('You can only select from ongoing or future months');
+		}
 		currentMonth = parseInt(this.getAttribute('index'));
 		showCalendar(currentMonth, currentYear);
 	});
@@ -33,6 +41,12 @@ monthChoices.forEach(function (month) {
 
 yearChoices.forEach(function (year) {
 	year.addEventListener('click', function (e) {
+		let newYr = parseInt(this.textContent);
+		let today = new Date();
+
+		if (today.getFullYear() > newYr || (today.getMonth() === 0 && today.getFullYear() > newYr)) {
+			return showWarning('You can only select from ongoing or future years ');
+		}
 		currentYear = parseInt(this.textContent);
 		showCalendar(currentMonth, currentYear);
 	});
@@ -45,6 +59,16 @@ function next() {
 }
 
 function previous() {
+	let newMn = currentMonth === 0 ? 11 : currentMonth - 1;
+	let newYr = currentMonth === 0 ? currentYear - 1 : currentYear;
+	let today = new Date();
+
+	if (today.getMonth() > 0 && today.getMonth() > newMn && today.getFullYear() >= newYr) {
+		return showWarning('You can only select from ongoing or future months');
+	} else if (today.getMonth() === 0 && today.getFullYear() > newYr) {
+		return showWarning('You can only select from ongoing or future months');
+	}
+
 	currentYear = currentMonth === 0 ? currentYear - 1 : currentYear;
 	currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
 	showCalendar(currentMonth, currentYear);
