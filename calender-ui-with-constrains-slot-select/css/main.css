@@ -49,3 +49,20 @@ button {
 .day-slot.type-2.selected {
 	background-color: yellow !important;
 }
+
+#calendar-body tr {
+	line-height: 17.5px;
+	min-height: 17.5px;
+	height: 17.5px;
+}
+
+#calendar-body tr:last-child {
+	display: none;
+}
+.table100,
+.row,
+.container,
+.table-responsive,
+.table-bordered {
+	height: 100%;
+}
