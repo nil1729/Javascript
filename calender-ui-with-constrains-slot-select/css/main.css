@@ -43,11 +43,9 @@ button {
 
 .day-slot.type-3.selected {
 	background-color: purple !important;
-	pointer-events: none !important;
 	color: white !important;
 }
 
 .day-slot.type-2.selected {
 	background-color: yellow !important;
-	pointer-events: none !important;
 }

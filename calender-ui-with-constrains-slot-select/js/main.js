@@ -133,6 +133,10 @@ let scheduledEvents = getSavedEvents();
 
 document.addEventListener('click', (e) => {
 	if (e.target && e.target.id && e.target.classList.contains('day-slot')) {
+		if (e.target.classList.contains('selected')) {
+			return deleteEvent(e.target);
+		}
+
 		let [y, m, d] = e.target.id.split('-');
 
 		if (monthIsScheduled(y, m)) {
@@ -152,12 +156,42 @@ document.addEventListener('click', (e) => {
 				);
 			}
 		}
-		saveEvents();
+		// saveEvents();
 	}
 
 	if (e.target && e.target.id && e.target.id.startsWith('close:')) {
 	}
 });
+
+document.getElementById('submit-btn').addEventListener('click', function (e) {
+	saveEvents();
+	showEventOnUI();
+});
+
+function deleteEvent(elem) {
+	let [y, m, d] = elem.id.split('-');
+	let sectionAttr = elem.getAttribute('section');
+	let dates = [];
+	document.querySelectorAll('#calendar-body tr td').forEach(function (node) {
+		if (node.getAttribute('section') === sectionAttr) {
+			dates.push(node);
+		}
+	});
+
+	let sectionId = dateToYMD(parseDate(dates[0].id));
+	scheduledEvents = scheduledEvents.map(function (it) {
+		if (monthIsScheduled(y, m).id === it.id) {
+			let mn = monthIsScheduled(y, m);
+			mn.sections = mn.sections.filter((sc) => sc.id !== sectionId);
+			return mn;
+		} else return it;
+	});
+	scheduledEvents = scheduledEvents.filter((month) => month.sections.length > 0);
+
+	// saveEvents();
+	updateScheduledDateSlots();
+	// showEventOnUI();
+}
 
 function firstValidWeek() {
 	let firstWeekIndex = -1;
@@ -200,6 +234,10 @@ function scheduledNewEvent(elem) {
 			diffFirst = clickedDate.getDay() - 4;
 			slotType = 2 - 1;
 		}
+		if (slotType + 1 === 2) {
+			return showWarning(`You have to select a 3-Days slot from first week`);
+		}
+
 		firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
 
 		let newGroup = {
@@ -225,8 +263,8 @@ function scheduledNewEvent(elem) {
 				diffFirst = clickedDate.getDay() - 3;
 				slotType = 3 - 1;
 			}
-			if (monthIsScheduled(y, m).sections[0].type === slotType + 1) {
-				return showWarning(`You have to select a ${slotType + 1}-Days slot`);
+			if (slotType + 1 === 3) {
+				return showWarning(`You have to select a 2-Days slot from first week`);
 			}
 			firstGroupDate.setDate(firstGroupDate.getDate() - diffFirst);
 
@@ -319,7 +357,7 @@ function scheduledNewEvent(elem) {
 		}
 	}
 	updateScheduledDateSlots();
-	showEventOnUI();
+	// showEventOnUI();
 }
 
 function parseDate(id, arg) {
@@ -412,13 +450,20 @@ function showEventOnUI() {
 function updateScheduledDateSlots() {
 	document.querySelectorAll('#calendar-body tr td').forEach((node) => {
 		node.classList.remove('selected', 'type-3', 'type-2');
+		node.removeAttribute('slot-type');
 	});
 	let currMnObj = monthIsScheduled(currentYear, currentMonth);
 	if (currMnObj) {
 		currMnObj.sections.forEach((sc) => {
-			sc.dates.forEach((dt) => {
+			let groupId = -1;
+			sc.dates.forEach((dt, index) => {
+				if (groupId === -1) {
+					groupId = dateToYMD(new Date(dt));
+				}
 				let el = document.getElementById(`${dateToYMD(new Date(dt))}`);
 				if (el) {
+					el.setAttribute('slot-type', `type-${sc.type}`);
+					el.setAttribute('section', `${groupId}`);
 					el.classList.add('selected', `type-${sc.type}`);
 				}
 			});
